@@ -19,6 +19,7 @@ const OPS: Record<number, [number, number, number]> = {
 };
 
 function run(p: Uint8Array, inp: Uint8Array): { out: number[]; code: number } {
+  const enc = new TextEncoder();
   const n = p.length;
   const D = new Int32Array(256);
   let sp = 0;
@@ -127,7 +128,7 @@ function run(p: Uint8Array, inp: Uint8Array): { out: number[]; code: number } {
         break;
       }
       case 0x50: {
-        const bytes = new TextEncoder().encode(String(D[sp - 1]));
+        const bytes = enc.encode(String(D[sp - 1]));
         if (out.length + bytes.length > 65536) return trap(11);
         sp--;
         for (const ch of bytes) out.push(ch);
