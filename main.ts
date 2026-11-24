@@ -18,8 +18,11 @@ const OPS: Record<number, [number, number, number]> = {
   0x53: [0, 1, 0],
 };
 
+// One shared encoder for the PRINT_INT (0x50) opcode, reused across all
+// runs instead of allocating a new TextEncoder on every print.
+const enc = new TextEncoder();
+
 function run(p: Uint8Array, inp: Uint8Array): { out: number[]; code: number } {
-  const enc = new TextEncoder();
   const n = p.length;
   const D = new Int32Array(256);
   let sp = 0;
